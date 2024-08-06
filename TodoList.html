@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To do list</title>
+    <style>
+        * {
+            margin: 0%;
+            padding: 0%;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #8052ec, #d161ff);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 2rem;
+        }
+
+        .outercont {
+            min-height: 40vh;
+            width: 70vh;
+            position: relative;
+        }
+
+        .cont {
+            height: 15vh;
+            width: 60vh;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            border-radius: 5px;
+            box-shadow: 0px 15px 30px rgba(104, 101, 101, 0.468);
+            /* gap: 3rem; */
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .cont input {
+            height: 50%;
+            width: 35%;
+            padding-left: 1rem;
+            font-weight: 600;
+            border-radius: 5px;
+            border: 2px solid #00000052;
+            font-size: 1rem;
+        }
+
+        .cont input:focus {
+            outline: none;
+            border: 2px solid #d161ff;
+        }
+
+        .cont button {
+            height: 50%;
+            width: 15%;
+            background-color: #a12ae1;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .cont button:hover {
+            background-color: #9025ca;
+        }
+
+        .listcontainer {
+            position: absolute;
+            min-height: 15vh;
+            width: 60vh;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+            box-shadow: 0px 15px 30px rgba(104, 101, 101, 0.468);
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            gap: 5px;
+            padding: 5% 0%;
+        }
+
+        .lists {
+            height: 7vh;
+            width: 90%;
+            border-bottom: 1px solid black;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: end;
+            padding-bottom: 2%;
+            cursor: pointer;
+        }
+
+        .lists svg {
+            position: absolute;
+            left: 90%;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #d161ff;
+        }
+        .listcontainer .donetask{
+            color: rgba(141, 144, 147, 0.779);
+        }
+        .listcontainer .donetask::before{
+        content: "";
+        top: 65%;
+        position: absolute;
+        height: 3%;
+        width: 80%;
+        transform: translateY(-50%);
+        background: #252525;       
+        }
+        @media(max-width:600px){
+            .cont {
+            height: 15vh;
+            width: 60vh;
+            background-color: #fff;
+            display: grid;
+            grid-template-rows: repeat(2,1fr);
+            grid-template-columns: repeat(2,1fr);
+            border-radius: 5px;
+            box-shadow: 0px 15px 30px rgba(104, 101, 101, 0.468);
+            gap: 0.5rem;
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem;
+        }
+          #addTask{           
+            height: 100%;
+            width: 100%;
+            padding-left: 1rem;
+            grid-row: 1/2;
+            grid-column: 1/3;
+            font-weight: 600;
+            border-radius: 5px;
+            border: 2px solid #00000052;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        #addTask:focus {
+            outline: none;
+            border: 2px solid #d161ff;
+        }
+        #search{
+            height: 100%;
+            width: 100%;
+            padding-left: 1rem;
+            grid-row: 2/3;
+            grid-column: 1/2;
+            font-weight: 600;
+            border-radius: 5px;
+            border: 2px solid #00000052;
+            font-size: 1rem;
+        }
+        #search:focus {
+            outline: none;
+            border: 2px solid #d161ff;
+        }
+        .cont button {
+            height: 100%;
+            width: 100%;
+            background-color: #a12ae1;
+            grid-row: 2/3;
+            grid-column: 2/3;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .cont button:hover {
+            background-color: #9025ca;
+        }
+        }        
+    </style>
+</head>
+
+<body>
+    <div class="outercont">
+        <div class="cont">
+            <input id="addTask" type="text" placeholder="Task to be done">
+            <input id="search" type="text" placeholder="Search">
+            <button>Add</button>
+        </div>
+        <div class="listcontainer"></div>
+    </div>
+   
+    <script>
+        let listcont = document.querySelector('.listcontainer');
+        let button = document.querySelector('button');
+        let input = document.querySelector('#addTask');
+        let inputSearch = document.querySelector('#search');
+        function check(list){
+            let arr = [];
+            let mapped =  Array.from(list).map((elem)=>{
+                      return elem.innerText;
+                   })
+                   let filtered = mapped.forEach((elem)=>{
+                     if(elem.includes(inputSearch.value)){
+                        if(!arr.includes(elem)){
+                             arr.push(elem);
+                        }
+                     }
+                   })
+                   listcont.innerHTML = "";
+                   for(let i = 0 ; i<arr.length;i++){
+                    listcont.innerHTML+=` <div class="lists">${arr[i]}
+        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="100" viewBox="0,0,256,256">
+            <g fill="#9025ca" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M10.80664,2c-0.517,0 -1.01095,0.20431 -1.37695,0.57031l-0.42969,0.42969h-5c-0.36064,-0.0051 -0.69608,0.18438 -0.87789,0.49587c-0.18181,0.3115 -0.18181,0.69676 0,1.00825c0.18181,0.3115 0.51725,0.50097 0.87789,0.49587h16c0.36064,0.0051 0.69608,-0.18438 0.87789,-0.49587c0.18181,-0.3115 0.18181,-0.69676 0,-1.00825c-0.18181,-0.3115 -0.51725,-0.50097 -0.87789,-0.49587h-5l-0.42969,-0.42969c-0.365,-0.366 -0.85995,-0.57031 -1.37695,-0.57031zM4.36523,7l1.52734,13.26367c0.132,0.99 0.98442,1.73633 1.98242,1.73633h8.24805c0.998,0 1.85138,-0.74514 1.98438,-1.74414l1.52734,-13.25586z"></path></g></g>
+</svg>
+    </div>`;
+                   }
+                   if(inputSearch.value === ""){
+                    listcont.innerHTML = "";
+                    for(let i = 0 ; i<list.length;i++){
+                    listcont.innerHTML+=` <div class="lists">${list[i].textContent}
+        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="100" viewBox="0,0,256,256">
+            <g fill="#9025ca" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M10.80664,2c-0.517,0 -1.01095,0.20431 -1.37695,0.57031l-0.42969,0.42969h-5c-0.36064,-0.0051 -0.69608,0.18438 -0.87789,0.49587c-0.18181,0.3115 -0.18181,0.69676 0,1.00825c0.18181,0.3115 0.51725,0.50097 0.87789,0.49587h16c0.36064,0.0051 0.69608,-0.18438 0.87789,-0.49587c0.18181,-0.3115 0.18181,-0.69676 0,-1.00825c-0.18181,-0.3115 -0.51725,-0.50097 -0.87789,-0.49587h-5l-0.42969,-0.42969c-0.365,-0.366 -0.85995,-0.57031 -1.37695,-0.57031zM4.36523,7l1.52734,13.26367c0.132,0.99 0.98442,1.73633 1.98242,1.73633h8.24805c0.998,0 1.85138,-0.74514 1.98438,-1.74414l1.52734,-13.25586z"></path></g></g>
+</svg>
+    </div>`;
+                   }
+                   }
+                }
+
+        function search(list){
+             inputSearch.addEventListener('input',(e)=>{
+               if(inputSearch.value!==""){
+                listcont.innerHTML = "";
+               }
+               if(inputSearch.value!==""){
+                   check(list);
+               }        
+            })
+        }
+        function deleteDiv(){
+                let svg = document.querySelectorAll('svg');
+                Array.from(svg).forEach((val) => {
+                    val.addEventListener('click', (e) => {
+                        val.parentElement.remove();
+                    })
+                        })
+            }
+           function doneTask(){
+                let lists = document.querySelectorAll('.lists');
+                Array.from(lists).map((val)=>{
+                    let plug = true;
+                   val.addEventListener('click',()=>{
+                    if(plug){
+                        val.classList.add('donetask');
+                        plug = false;
+                    }
+                    else{
+                        val.classList.remove('donetask');
+                        plug = true;
+                    }                   
+                   })
+                })
+                search(lists);
+            }
+           function creatediv() {
+                button.addEventListener('click', (e) => {
+                    if (input.value === "") {
+                        alert("Please Enter the task");
+                    }
+                    else {
+                        let div = document.createElement('div');
+                        div.className = 'lists';
+                        listcont.appendChild(div);
+                        div.textContent = input.value;
+                        div.innerHTML += `<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="100" viewBox="0,0,256,256">
+                            <g fill="#9025ca" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M10.80664,2c-0.517,0 -1.01095,0.20431 -1.37695,0.57031l-0.42969,0.42969h-5c-0.36064,-0.0051 -0.69608,0.18438 -0.87789,0.49587c-0.18181,0.3115 -0.18181,0.69676 0,1.00825c0.18181,0.3115 0.51725,0.50097 0.87789,0.49587h16c0.36064,0.0051 0.69608,-0.18438 0.87789,-0.49587c0.18181,-0.3115 0.18181,-0.69676 0,-1.00825c-0.18181,-0.3115 -0.51725,-0.50097 -0.87789,-0.49587h-5l-0.42969,-0.42969c-0.365,-0.366 -0.85995,-0.57031 -1.37695,-0.57031zM4.36523,7l1.52734,13.26367c0.132,0.99 0.98442,1.73633 1.98242,1.73633h8.24805c0.998,0 1.85138,-0.74514 1.98438,-1.74414l1.52734,-13.25586z"></path></g></g>
+</svg>`;
+                        input.value = "";
+                         deleteDiv();
+                         doneTask();
+                         
+                        }
+                    })
+                }
+                creatediv();
+               
+    </script>
+</body>
+
+</html>
